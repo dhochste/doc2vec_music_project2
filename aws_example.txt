@@ -1,0 +1,14 @@
+# For using aws w/ mysql server
+
+# In terminal:
+# (local) 3307 on your computer goes to 3306 (on aws)
+>>ssh -L 3307:localhost:3306 ubunto@___url___.compute.amazonaws.com -i
+# --> leave open (connection to aws)
+# --> to logout : ctrl + C
+
+# In  new tab, connect thru mysql
+>>mysql -h 127.0.0.1 -P 3307 -u root -p
+>>
+
+# In pymysql, just make sure host is 127.0.0.1 and port is 3307
+
