@@ -27,26 +27,8 @@ if __name__ == '__main__':
 	directory_path = '../../Lemmatized_by_Sentence/'
 	# Loop through each df, convert to desired format, and pickle the new df
 
-	file_path_base = 'amazon_music_random_lemmatized_'
-	file_path_end = '.pandas'
-	number_dfs = 22
-	for i in range(number_dfs):
-		print("Loading df number {0}".format(i))
-		# Load the original dfs
-		file_path = file_path_base + str(i) + file_path_end
-		df = dm.load_pickled_df(directory_path, file_path)
-
-		# Adjust the df
-		df = dm.df_column_reduce(df)
-		df = dm.df_title_format(df)
-		df = dm.df_review_collapse(df)
-
-		# Concat (add on) the dataframe
-		if i == 0:
-			df_all = df.copy(deep=True)
-		else:
-			df_all = pd.concat([df_all, df])
-		print("Successful df concatenation.")
+	# load pickled df: Hard-coded formatted file.
+	df_all = dm.load_pickled_df(directory_path,'df_reviews_01.pandas')
 
 	# Run Doc2Vec on the dataset of reviews
 	# Not sure what this does...
@@ -78,5 +60,5 @@ if __name__ == '__main__':
 
 	# Save the model
 	model_directory = '../doc2vec_models/'
-	model_filename = 'model_all_01.doc2vec'
+	model_filename = 'model_01.doc2vec'
 	model.save(model_directory+model_filename)

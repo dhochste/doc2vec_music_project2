@@ -11,8 +11,6 @@ import doc2vec_methods as dm
 import cPickle as pickle
 
 
-
-
 def main():
 	# Set the path to the pickled file
 	directory_path = '../../Lemmatized_by_Sentence/'
