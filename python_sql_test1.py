@@ -3,6 +3,8 @@ import os
 import json
 
 import pymysql as mdb
+from pandas.io import sql
+
 
 with open('credentials.json') as credentials_file:
 	credentials = json.load(credentials_file)

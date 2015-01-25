@@ -50,10 +50,11 @@ def df_column_reduce(df):
 	"""
 	Keep only relevant columns. Using hard-coded column names from Amazon database
 	"""
-	df = df.drop(['product/price','review/helpfulness','review/score','review/profileName'], \
+	df = df.drop(['product/price','review/helpfulness','review/score','review/profileName',
+		'review/summary','review/time','review/userId'],
 		axis=1, inPlace=False)
 
-	df.columns = ['productId','title','summary','time','userId','tokenize']
+	df.columns = ['productId','title','tokenize']
 
 	return df
 
