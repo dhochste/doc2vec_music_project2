@@ -34,15 +34,31 @@ def load_pickled_df(directory_path, file_path):
     return df
 
 
-# def save_pickle_df(directory_path, file_path, data_frame):
-# 	"""
-# 	Save the df into a pickle file
-# 	"""
-# 	file_0 = directory_path+file_path
+def df_filter_by_num_reviews(df,filter_num = 3):
+	"""
+	Filter out reviews with less than filter_num of reviews for an album
+	"""
 
-# 	pickle.dump( data_frame, open( file_0, "wb" ) )
+	# Sort by titlename
+	df.sort(['title'], inplace=True)
 
-# 	return
+	# Add a column of 1s, this will be used later to eliminate titles with only one song
+	df['num_titles'] = pd.Series(np.ones((len(df)),dtype=np.int), index=df.index)
+
+	# group by title
+	df_titlegroup = df.groupby(['title'])
+	# sum the number of titles
+	temp = df_titlegroup[['num_titles']].transform(sum).sort('num_titles')
+	# order by number of titles
+	df = df.ix[ df_titlegroup[['num_titles']].transform(sum).sort('num_titles').index]
+	# Keep and sort the titles with enough reviews
+	df_filter = df[temp['num_titles']>=filter_num]
+	df_filter.sort(['title'], inplace=True)
+	# Drop the extra column
+	df_filter.drop(['num_titles'],axis=1,inplace=True)
+
+	return df_filter
+
 
 
 
@@ -54,7 +70,7 @@ def df_column_reduce(df):
 		'review/summary','review/time','review/userId'],
 		axis=1, inPlace=False)
 
-	df.columns = ['productId','title','tokenize']
+	df.columns = ['productId','title','tokenized']
 
 	return df
 
