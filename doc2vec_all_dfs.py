@@ -14,7 +14,7 @@ import time
 from doc2vec_classes import LabeledReviewSentence
 import gensim, logging 		# For Doc2Vec
 import os
-
+import sys
 
 
 # # Pickle and save the adjust df
@@ -26,19 +26,21 @@ import os
 if __name__ == '__main__':
 	# Set the path to the pickled file
 	directory_path = '../../Lemmatized_by_Sentence/'
+
 	# Loop through each df, convert to desired format, and pickle the new df
+	i = 0
+	for fname in os.listdir(directory_path):
+		path = os.path.join(directory_path, fname)
+		if os.path.isdir(path): # skip directories
+			continue
+		elif os.path.splitext(path)[1] != ".pandas":
+			continue
 
-	file_path_base = 'amazon_music_random_lemmatized_'
-	file_path_end = '.pandas'
-	number_dfs = 22
 
-	for i in range(number_dfs):
 		t0 = time.time()
 		# Load the original dfs
-		# print("Loading original dataframe {0}".format(t1-t0))
-		file_path = file_path_base + str(i) + file_path_end
-		print("Loading " + file_path)
-		df = dm.load_pickled_df(directory_path, file_path)
+		print("Loading " + fname)
+		df = dm.load_pickled_df(directory_path, fname)
 
 		# Adjust the df
 		print("Processing dataframe")
@@ -50,12 +52,12 @@ if __name__ == '__main__':
 		print("Adding df to df_all with concat")
 		if i == 0:
 			df_all = df.copy()
-
 		else:
 			df_all = pd.concat([df_all, df])
 
 		t1 = time.time()
-		print("Time iteration {0} was {1:.2f} seconds".format( i, (t1-t0) ))
+		print("Time for iteration {0} was {1:.2f} seconds".format( i, (t1-t0) ))
+		i+=1
 
 	# Pickle and save the new, compiled df
 	new_file = 'df_reviews_all.pandas'
