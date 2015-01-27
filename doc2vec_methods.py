@@ -60,6 +60,24 @@ def df_filter_by_num_reviews(df,filter_num = 3):
 	return df_filter
 
 
+def remove_brackets(list_of_strs):
+	""""
+	Removes anything in [ ] or ( ) at the end of a string.
+	"""
+	new_list =[]
+
+	for string in list_of_strs:
+		match = re.search(r'([^\[\(\)\]])*',string)
+
+		if match is not None:
+			new_list.append(match.group(0))
+		else:
+			print "Warning: Unexpected non-match in remove_brackets()"
+			print string
+
+	return new_list
+
+
 
 
 def df_column_reduce(df):

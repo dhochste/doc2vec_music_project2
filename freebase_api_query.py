@@ -21,9 +21,9 @@ def do_query(album_title, service_url, api_key, limit = 1):
 
 	# Create a mql query
 	query_names_genres = [{
-		"type": "music/album",
+		"type": "/music/album",
 		"artist": None,
-		"name": music_album_titles,
+		"name": album_title,
 		"genre": []
 		"limit": limit
 	}]
@@ -56,6 +56,6 @@ def dict_get_artist_genre(response):
 	genre_list = response[u'result'][0][u'genre']
 	genre_list =[x.encode('UTF8') for x in genre_list]
 
-	return 
+	return title, artist, genre_list
 
 
