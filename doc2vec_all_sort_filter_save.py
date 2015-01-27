@@ -11,11 +11,11 @@ import doc2vec_methods as dm
 import pandas as pd
 import cPickle as pickle
 import time
-from doc2vec_classes import LabeledReviewSentence
-import gensim, logging 		# For Doc2Vec
+# from doc2vec_classes import LabeledReviewSentence
+# import gensim, logging 		# For Doc2Vec
 import os
-import sys
-import csv
+# import sys
+# import csv
 
 
 # # Pickle and save the adjust df
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
 		# Group by title in order to filter out titles with less than 2 reviews
 		print("Filtering dataframe")
-		df = df_filter_by_num_reviews(df, 3)
+		df = dm.df_filter_by_num_reviews(df, 3)
 
 		# Add df to csv file
 		print("Writing to csv file")
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 			df_concat = pd.concat([df_concat, df])
 
 			new_file = 'df_reviews_concat_' + str(concat_count) + '.pandas'
-			pickle.dump( df_concat, open( new_dir_path+new_file_path, "wb"))
+			pickle.dump( df_concat, open( new_dir_path+new_file, "wb"))
 			concat_count += 1
 			del df_concat
 		else:
