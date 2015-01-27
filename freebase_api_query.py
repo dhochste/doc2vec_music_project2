@@ -10,26 +10,22 @@ import json
 import requests
 import sys
 import time
-
 from collections import defaultdict
 
 
-api_name = 'freebase'
-api_version = 'v1'
-with open('../doc2vec_music_project2/credentials.json') as credentials_file:
-    credentials = json.load(credentials_file)
-api_key = credentials['google_api']['api_key']
-
-service_url = 'https://www.googleapis.com/freebase/v1/mqlread'
-
-def do_query(music_album_titles):
+def do_query(album_title, service_url, api_key, limit = 1):
+	"""
+	Query the using api_key for the artist and genre corresponding to an album 
+	title. This was created for freebase api.
+	"""
 
 	# Create a mql query
 	query_names_genres = [{
 		"type": "music/album",
 		"artist": None,
 		"name": music_album_titles,
-		"genre": None
+		"genre": []
+		"limit": limit
 	}]
 
     opts = {
@@ -45,8 +41,21 @@ def do_query(music_album_titles):
         print response
         sys.exit(1)
 
-    results_dict = defaultdict(dict)
-    for item in response[u'result']:
-        g[item[u'name']] = {'Artist': item[u'artist'], 'Genre': item[u'genre']}
+    return response
 
-    return results_dict
+    # results_dict = defaultdict(dict)
+    # for item in response[u'result']:
+    #     results_dict[item[u'name']] = {'Artist': item[u'artist'], 'Genre': item[u'genre']}
+
+    # return results_dict
+
+def dict_get_artist_genre(response):
+
+	artist = response[u'result'][0][u'artist'].encode('UTF8')
+	title = response[u'result'][0][u'name'].encode('UTF8')
+	genre_list = response[u'result'][0][u'genre']
+	genre_list =[x.encode('UTF8') for x in genre_list]
+
+	return 
+
+
