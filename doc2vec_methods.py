@@ -70,14 +70,17 @@ def remove_brackets(list_of_strs):
 		match = re.search(r'([^\[\(\)\]])*',string)
 
 		if match is not None:
-			new_list.append(match.group(0))
+			new_string = match.group(0)
+			if new_string == '' or new_string[-1] != ' ':
+				new_list.append(match.group(0))
+			elif new_string[-1] == ' ':
+				new_list.append(match.group(0)[:-1])
+				
 		else:
 			print "Warning: Unexpected non-match in remove_brackets()"
 			print string
 
 	return new_list
-
-
 
 
 def df_column_reduce(df):
@@ -96,7 +99,7 @@ def df_title_format(df):
 	"""
 	Replace spaces with underscores
 	"""
-	df['title'].map(lambda x: x.replace(' ','_'))
+	df['title'].map(lambda title: title.replace(' ','_'))
 
 	return df
 
