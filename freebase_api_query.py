@@ -49,11 +49,11 @@ def get_artist_genre(response):
 		empty_flag = 1
 	else:
 		title = response[u'result'][0][u'name'].encode('UTF8')
-		if response[u'result'][0][u'artist'] != []:
+		if response[u'result'][0][u'artist'] != [] and response[u'result'][0][u'artist'] != [None]:
 			artist = response[u'result'][0][u'artist'][0].encode('UTF8')
 		else:
 			artist = []
-		if response[u'result'][0][u'genre'] != []:
+		if response[u'result'][0][u'genre'] != [] and response[u'result'][0][u'genre'] != [None]:
 			genre_list = response[u'result'][0][u'genre']
 			genre_list =[genre.encode('UTF8') for genre in genre_list]
 		else:
