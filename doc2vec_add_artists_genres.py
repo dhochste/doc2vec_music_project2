@@ -58,12 +58,19 @@ if __name__ == '__main__':
 		total_empty = 0
 		total_none = 0
 		count = 0
+		err_log = []
 		for title in titles:
 			# avoid empty title at beginning
 			if title == '':
 				title_artist_genre.append(['','',''])
 			else:
-				response = faq.do_query(title, service_url, api_key, 1)
+				response, err_flag = faq.do_query(title, service_url, api_key, 1)
+
+				if err_flag:
+					err_log.append([count, title])
+					title_artist_genre.append([title,'',''])
+					continue
+
 				# print response
 
 				if response is not None:

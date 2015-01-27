@@ -34,9 +34,12 @@ def do_query(album_title, service_url, api_key, limit = 1):
 	if u'error' in response:
 		print 'Request failed. Return: '
 		print response
-		sys.exit(1)
+		err_flag = 1
+		# sys.exit(1)
+	else:
+		err_flag = 0
 
-	return response
+	return response, err_flag
 
 def get_artist_genre(response):
 	""""
