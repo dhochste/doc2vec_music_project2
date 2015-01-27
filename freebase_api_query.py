@@ -54,25 +54,25 @@ def get_artist_genre(response):
 		title = response[u'result'][0][u'name'].encode('UTF8')
 		try:
 			artist = response[u'result'][0][u'artist'][0].encode('UTF8')
-		except (AttributeError, TypeError):
+		except (AttributeError, TypeError, IndexError):
 			artist = []
-
 		try: 
-			enre_list = response[u'result'][0][u'genre']
+			genre_list = response[u'result'][0][u'genre']
 			genre_list =[genre.encode('UTF8') for genre in genre_list]
-		except (AttributeError, TypeError):
+		except (AttributeError, TypeError, IndexError):
 			genre_list = []
-			
-		# if response[u'result'][0][u'artist'] != [] and response[u'result'][0][u'artist'] != [None]:
-		# 	artist = response[u'result'][0][u'artist'][0].encode('UTF8')
-		# else:
-		# 	artist = []
-		# if response[u'result'][0][u'genre'] != [] and response[u'result'][0][u'genre'] != [None]:
-		# 	genre_list = response[u'result'][0][u'genre']
-		# 	genre_list =[genre.encode('UTF8') for genre in genre_list]
-		# else:
-		# 	genre_list = []
 		empty_flag = 0
+
+		# # if response[u'result'][0][u'artist'] != [] and response[u'result'][0][u'artist'] != [None]:
+		# # 	artist = response[u'result'][0][u'artist'][0].encode('UTF8')
+		# # else:
+		# # 	artist = []
+		# # if response[u'result'][0][u'genre'] != [] and response[u'result'][0][u'genre'] != [None]:
+		# # 	genre_list = response[u'result'][0][u'genre']
+		# # 	genre_list =[genre.encode('UTF8') for genre in genre_list]
+		# # else:
+		# # 	genre_list = []
+		# empty_flag = 0
 
 	return title, artist, genre_list, empty_flag
 

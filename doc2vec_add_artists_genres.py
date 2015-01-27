@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
 		# deal with early stop from inital run
 		if fname == 'df_reviews_concat_0.pandas':
-			titles = titles[(1950+9973):]
+			titles = titles[19925:]
 
 		for title in titles:
 			# avoid empty title at beginning
@@ -108,17 +108,12 @@ if __name__ == '__main__':
 		df_tag = pd.DataFrame(title_artist_genre, columns=['title','artist','genre'])
 
 		# save the new data frame
-		new_file = 'df_tag_' + os.path.splitext(path)[0][-1] + '.pandas'
+		new_file = 'df_tag_' + os.path.splitext(path)[0][-1] + '.pd'
 		print("Pickling" + new_file)
 		pickle.dump( df_tag, open( directory_path+new_file, "wb"))
 
+		print ("Breaking. DONT FORGET TO REMOVE THE BREAK!")
 
-	# Loop through each df
-	# load the dataframe
-	# Find unique titles - keep title indices
-	# iter through unique titles and query for artist, genre
-		# If more than one - only choose the first?
-	# add the artist and genre columns to the df
-	# save the updated data frame
+		break
 
 
