@@ -59,6 +59,11 @@ if __name__ == '__main__':
 		total_none = 0
 		count = 0
 		err_log = []
+
+		# deal with early stop from inital run
+		if fname == 'df_reviews_concat_0.pandas':
+			titles = titles[(1950+9973):]
+
 		for title in titles:
 			# avoid empty title at beginning
 			if title == '':
@@ -78,7 +83,7 @@ if __name__ == '__main__':
 					title_artist_genre.append([cur_title,cur_artist,cur_genre])
 					total_empty += empty_flag
 				else:
-					title_artist_genre.append(['','',''])
+					title_artist_genre.append([title,'',''])
 					total_none += 1
 
 			if count%1000 == 0:
