@@ -31,7 +31,10 @@ if __name__ == '__main__':
 	directory_path = '../../Lemmatized_by_Sentence/processed_files/'
 
 	# Loop through each df
-	for fname in os.listdir(directory_path):
+	##### TEMP #####
+	# for fname in os.listdir(directory_path):
+	##### TEMP ####
+	for fname in ['df_reviews_concat_4.pandas']:
 		path = os.path.join(directory_path, fname)
 		# skip directories and files that aren't pickled pandas
 		if os.path.isdir(path):
@@ -61,8 +64,8 @@ if __name__ == '__main__':
 		err_log = []
 
 		# deal with early stop from inital run
-		if fname == 'df_reviews_concat_0.pandas':
-			titles = titles[19925:]
+		# if fname == 'df_reviews_concat_0.pandas':
+		# 	titles = titles[19925:]
 
 		for title in titles:
 			# avoid empty title at beginning
@@ -108,12 +111,15 @@ if __name__ == '__main__':
 		df_tag = pd.DataFrame(title_artist_genre, columns=['title','artist','genre'])
 
 		# save the new data frame
-		new_file = 'df_tag_' + os.path.splitext(path)[0][-1] + '.pd'
+		#### TEMP ######
+		# new_file = 'df_tag_' + os.path.splitext(path)[0][-1] + '.pd'
+		#### TEMP #####
+		new_file = 'df_tag_4.pd'
 		print("Pickling" + new_file)
 		pickle.dump( df_tag, open( directory_path+new_file, "wb"))
 
-		print ("Breaking. DONT FORGET TO REMOVE THE BREAK!")
+		# print ("Breaking. DONT FORGET TO REMOVE THE BREAK!")
 
-		break
+		# break
 
 

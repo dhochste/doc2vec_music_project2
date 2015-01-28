@@ -19,6 +19,7 @@ import sys
 import re
 import gensim, logging 		# For Doc2Vec
 import cPickle as pickle 	# Used for pickling/unpickling files
+import math
 
 
 def load_pickled_df(directory_path, file_path):
@@ -82,6 +83,38 @@ def remove_brackets(list_of_strs):
 
 	return new_list
 
+"""
+Several small functions for text cleaning in dataframes
+"""
+def convert_list_str(x):
+    if x == '[]':
+        x = ''
+    return x
+
+def convert_nan_str(x):
+    if isinstance(x,float):
+        if math.isnan(x):
+            x = ''
+    return x
+
+def convert_nan_list(x):
+    if x == np.nan:
+        x = []
+    return x
+
+def convert_strlist_list(string_list):
+    if isinstance(string_list, list):
+        string_list = string_list
+    elif string_list == '[]':
+        string_list = []
+    elif  isinstance(string_list, float):
+        if math.isnan(string_list):
+            string_list = []
+    else:
+        string_list = string.split(string_list[1:-1],", ")
+        string_list = [v.replace("'", "") for v in string_list]
+    return string_list
+
 
 def df_column_reduce(df):
 	"""
@@ -94,6 +127,7 @@ def df_column_reduce(df):
 	df.columns = ['productId','title','tokenized']
 
 	return df
+
 
 def df_title_format(df):
 	"""
