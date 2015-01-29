@@ -39,7 +39,12 @@ class LabeledArtistReview(object):
         for index,row in self.df.iterrows():
             artist = row['artist'].replace(' ','_')
             review = row['tokenized']
-            yield gensim.models.doc2vec.LabeledSentence(words=review, labels=[artist])
+            if artist != '':
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[artist])
+            else:
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[])
 
 
 class LabeledTitleArtistReview(object):
@@ -52,7 +57,15 @@ class LabeledTitleArtistReview(object):
             title = row['title'].replace(' ','_')
             artist = row['artist'].replace(' ','_')
             review = row['tokenized']
-            yield gensim.models.doc2vec.LabeledSentence(words=review, labels=[title, artist])
+            if title != '' and artist != '':
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[title, artist])
+            elif title != '':
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[title])
+            else:
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[])
 
 
 class LabeledAllReview(object):
@@ -66,35 +79,18 @@ class LabeledAllReview(object):
             artist = row['artist'].replace(' ','_')
             genre = [v.replace(' ','_') for v in row['genre']]
             review = row['tokenized']
-            yield gensim.models.doc2vec.LabeledSentence(words=review, labels=[title, artist].extend(genre))
-
-
-
-# # create a function to return a list of tuples: (beer name, similarity score)
-# # an extension of the doc2vec most_similar_n method
-# def most_similar_artists(positive_terms=[], negative_terms=[], artist_list=[], music_genre_lookup={}, doc2Vec_model = None):
-#     """
-#     Returns a list of tuples: (artist, similarity score) given pos and
-#     neg imput vocab, list of all artists, and an artist-genre dict.
-#     Uses a trained doc2vec_model as input
-#     """
-#     # populate the search terms with latent styles 
-#     positive_latent = populate_latent_styles(positive_terms, beer_style_lookup)
-#     negative_latent = populate_latent_styles(negative_terms, beer_style_lookup)
-#     all_search_terms = positive_latent + negative_latent
-#     print all_search_terms
-#     # find the array of distances for all terms
-#     distances = doc2Vec_model.most_similar(positive=positive_latent, negative=negative_latent, topn=None)
-#     # sort array and convert to indices, rather than raw values (which are returned)
-#     best_distance_indices = np.argsort(distances)[::-1]
-#     # build a dict of artists with assosciated distances
-#     artists = []
-#     for dist_index in best_distance_indices:
-#         vocab_word = doc2Vec_model.index2word[dist_index] 
-#         # if the word is an artist, and not one we searched for
-#         if vocab_word in artist_list and vocab_word not in all_search_terms: 
-#             artists.append((vocab_word, float(distances[dist_index]))) # assign the score to the entry
-#     return artists
+            if title != '' and artist != '' and genre != []:
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[title, artist].extend(genre))
+            elif title != '' and artist != '':
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[title, artist])
+            elif title != '':
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[title])
+            else:
+                yield gensim.models.doc2vec.LabeledSentence(words=review, 
+                    labels=[])
 
 
 """
