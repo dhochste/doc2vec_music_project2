@@ -32,9 +32,9 @@ if __name__ == '__main__':
 
 	# Loop through each df
 	##### TEMP #####
-	# for fname in os.listdir(directory_path):
+	for fname in os.listdir(directory_path):
 	##### TEMP ####
-	for fname in ['df_reviews_concat_4.pandas']:
+	# for fname in ['df_reviews_concat_4.pandas']:
 		path = os.path.join(directory_path, fname)
 		# skip directories and files that aren't pickled pandas
 		if os.path.isdir(path):
@@ -111,10 +111,10 @@ if __name__ == '__main__':
 		df_tag = pd.DataFrame(title_artist_genre, columns=['title','artist','genre'])
 
 		# save the new data frame
-		#### TEMP ######
-		# new_file = 'df_tag_' + os.path.splitext(path)[0][-1] + '.pd'
+		### TEMP ######
+		new_file = 'df_tag_' + os.path.splitext(path)[0][-1] + '.pd'
 		#### TEMP #####
-		new_file = 'df_tag_4.pd'
+		# new_file = 'df_tag_4.pd'
 		print("Pickling" + new_file)
 		pickle.dump( df_tag, open( directory_path+new_file, "wb"))
 

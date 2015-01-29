@@ -20,6 +20,7 @@ import re
 import gensim, logging 		# For Doc2Vec
 import cPickle as pickle 	# Used for pickling/unpickling files
 import math
+import string
 
 
 def load_pickled_df(directory_path, file_path):
@@ -89,6 +90,11 @@ Several small functions for text cleaning in dataframes
 def convert_list_str(x):
     if x == '[]':
         x = ''
+    elif isinstance(x, list):
+    	if x == []:
+    		x = ''
+    	else:
+    		print("Warning: Unexpected List")
     return x
 
 def convert_nan_str(x):
@@ -167,24 +173,31 @@ def df_review_collapse(df):
 	"""
 	return df_reviews
 
-# In future, hope to have an 'artist' column and a 'genre' column in the dataframe
-# For now, this function will just look up titles
-def most_similar_titles(df, positive_terms=[], negative_terms=[], doc2Vec_model=None):
-    all_search_terms = positive_terms +negative_terms
-    
+
+def most_similar_artists(positive_terms=[], negative_terms=[], artist_list=[], music_genre_lookup={}, doc2Vec_model = None):
+    """
+    Returns a list of tuples: (artist, similarity score) given pos and
+    neg imput vocab, list of all artists, and an artist-genre dict.
+    Uses a trained doc2vec_model as input.
+    Based on similar method developed by Ben Everson. Thanks, Ben!
+    """
+    # populate the search terms with latent styles 
+    positive_latent = populate_latent_styles(positive_terms, music_genre_lookup)
+    negative_latent = populate_latent_styles(negative_terms, music_genre_lookup)
+    all_search_terms = positive_latent + negative_latent
+    print all_search_terms
     # find the array of distances for all terms
-    distances = doc2Vec_model.most_similar(positive=positive_terms, negative=negative_terms, topn=None)
-    print distances[:5]
-    #sort array and convert to indices rather than raw values
-    best_distances_indices = np.argsort(distances)[::-1]
-    print best_distances_indices[:5]
-    title_scores = []
-    for dist_index in best_distances_indices:
-        vocab_word = doc2Vec_model.index2word[dist_index] # grab the word
-        # if the word is a title that wasn'tin the search
-        if vocab_word in df['title'] and vocab_word not in all_search_terms:
-            title_scores.append((vocab_word, float(distances[dist_index]))) # assign the score to the title
-    return title_scores
+    distances = doc2Vec_model.most_similar(positive=positive_latent, negative=negative_latent, topn=None)
+    # sort array and convert to indices, rather than raw values (which are returned)
+    best_distance_indices = np.argsort(distances)[::-1]
+    # build a dict of artists with assosciated distances
+    artists = []
+    for dist_index in best_distance_indices:
+        vocab_word = doc2Vec_model.index2word[dist_index] 
+        # if the word is an artist, and not one we searched for
+        if vocab_word in artist_list and vocab_word not in all_search_terms: 
+            artists.append((vocab_word, float(distances[dist_index]))) # assign the score to the entry
+    return artists
 
 
 
