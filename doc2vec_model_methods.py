@@ -57,7 +57,7 @@ def populate_artist_genres(artist_list, music_genre_dict):
 	for artist in artist_list:
 		if artist in music_genre_dict.keys():
 			populated_list.append(artist)
-			populated_list.extend(music_genre_dict[artist]) # add the latent style into the search terms
+			populated_list.extend(music_genre_dict[artist])	
 		else:
 			populated_list.append(artist)
 
@@ -94,6 +94,31 @@ def most_similar_artists_w_genre(positive_terms=[], negative_terms=[],
 
 
 def most_similar_artists(positive_terms=[], negative_terms=[], 
+	artist_list=[], list_len=10, doc2Vec_model = None):
+    """
+    Returns a list of tuples: (artist, similarity score) given pos and neg 
+    input vocab and a list of all artists. Uses a trained doc2vec_model as input.
+    Based on similar method developed by Ben Everson. Thanks, Ben!
+    """
+    all_search_terms = positive_terms+negative_terms
+    # find the array of distances for all terms
+    distances = doc2Vec_model.most_similar(positive=positive_terms, 
+    	negative=negative_terms, topn=3*list_len)
+
+    # print distances[:10]
+    # # sort array and convert to indices, rather than raw values (which are returned)
+    # best_distance_indices = np.argsort(distances)[::-1]
+    # # best_distance_indices = np.argsort([tuple[1] for tuple in temp_distances])[::-1]
+    # print best_distance_indices[:10]
+    # build a dict of artists with assosciated distances
+    artists = []
+    for tup in distances:
+    	if tup[0] in artist_list and tup[0] not in all_search_terms:
+    		artists.append(tup)
+    return artists[:list_len]
+
+
+def most_similar_artists_old(positive_terms=[], negative_terms=[], 
 	artist_list=[], doc2Vec_model = None):
     """
     Returns a list of tuples: (artist, similarity score) given pos and neg 
@@ -119,30 +144,6 @@ def most_similar_artists(positive_terms=[], negative_terms=[],
             artists.append((vocab_word, float(distances[dist_index]))) # assign the score to the entry
     return artists
 
-
-def most_similar_artists2(positive_terms=[], negative_terms=[], 
-	artist_list=[], list_len=10, doc2Vec_model = None):
-    """
-    Returns a list of tuples: (artist, similarity score) given pos and neg 
-    input vocab and a list of all artists. Uses a trained doc2vec_model as input.
-    Based on similar method developed by Ben Everson. Thanks, Ben!
-    """
-    all_search_terms = positive_terms+negative_terms
-    # find the array of distances for all terms
-    distances = doc2Vec_model.most_similar(positive=positive_terms, 
-    	negative=negative_terms, topn=2*list_len)
-
-    # print distances[:10]
-    # # sort array and convert to indices, rather than raw values (which are returned)
-    # best_distance_indices = np.argsort(distances)[::-1]
-    # # best_distance_indices = np.argsort([tuple[1] for tuple in temp_distances])[::-1]
-    # print best_distance_indices[:10]
-    # build a dict of artists with assosciated distances
-    artists = []
-    for tup in distances:
-    	if tup[0] in artist_list and tup[0] not in all_search_terms:
-    		artists.append(tup)
-    return artists[:list_len]
 
 
 

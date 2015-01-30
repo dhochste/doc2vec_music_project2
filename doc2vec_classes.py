@@ -81,7 +81,7 @@ class LabeledAllReview(object):
             review = row['tokenized']
             if title != '' and artist != '' and genre != []:
                 yield gensim.models.doc2vec.LabeledSentence(words=review, 
-                    labels=[title, artist].extend(genre))
+                    labels=[title, artist] + genre)
             elif title != '' and artist != '':
                 yield gensim.models.doc2vec.LabeledSentence(words=review, 
                     labels=[title, artist])

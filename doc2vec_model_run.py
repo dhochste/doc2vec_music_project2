@@ -30,6 +30,8 @@ if __name__ == '__main__':
 	t1 = time.time()
 	print("Time to load pickled: {0:.2f}".format(t1-t0))
 
+	pdb.set_trace()
+
 	# Set up iterators for the model
 
 	logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -41,7 +43,7 @@ if __name__ == '__main__':
 
 	# Build the model
 	num_workers = 4
-	num_epochs = 10
+	num_epochs = 2
 	
 	# pdb.set_trace()
 	# model_title = gensim.models.Doc2Vec(reviews_title, workers=num_workers, 
@@ -51,14 +53,17 @@ if __name__ == '__main__':
 	model_artist = gensim.models.Doc2Vec(workers=num_workers, alpha=0.025, min_alpha=0.025)
 	model_artist.build_vocab(reviews_artist)
 	for epoch in range(num_epochs):
+		print epoch
 		model_artist.train(reviews_artist)
-		model_artist.alpha -= 0.002
+		model_artist.alpha -= 0.002*5
 		model_artist.min_alpha = model_artist.alpha
 	# model_artist = gensim.models.Doc2Vec(reviews_artist, workers=num_workers, 
 	# 	alpha=0.025, min_alpha=0.025)
 	t1 = time.time()
 	print("Time to run Doc2Vec to generate artist model for {0} epochs was {1:.2f}".format(num_epochs,t1-t0))
-	model_artist.save(dir_path +'doc2vec_model_artist10.doc2vec')
+	model_artist.save(dir_path +'doc2vec_model_artist2.doc2vec')
+
+	pdb.set_trace()
 
 	t0 = time.time()
 	model_title_artist = gensim.models.Doc2Vec(workers=num_workers, alpha=0.025, min_alpha=0.025)
@@ -84,7 +89,7 @@ if __name__ == '__main__':
 	# 	alpha=0.025, min_alpha=0.025)
 	t1 = time.time()
 	print("Time to run Doc2Vec to generate all model for {0} epochs was {1:.2f}".format(num_epochs,t1-t0))
-	model_title_artist.save(dir_path +'doc2vec_model_title_artist10.doc2vec')
+	model_all.save(dir_path +'doc2vec_model_all10.doc2vec')
 
 
 
